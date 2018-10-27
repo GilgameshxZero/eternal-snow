@@ -1,5 +1,7 @@
 #pragma once
 
+#define _MBCS
+
 #include "main-wnd-proc.h"
 #include "timer-proc.h"
 #include <ctime>
