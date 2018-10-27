@@ -12,7 +12,6 @@ call cl ^
 /MP ^
 /incremental ^
 .\main.cpp ^
-.\main-wnd-proc.cpp ^
-.\snow-particle.cpp ^
-.\timer-proc.cpp
+.\wnd-procs.cpp ^
+.\snow-particle.cpp
 cd ..

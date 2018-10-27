@@ -4,9 +4,9 @@
 
 namespace EternalSnow {
 struct SnowParticle {
-    double hvel, vvel;  //Velocity.
+    double horiVel, vertVel;  //Velocity.
     double x, y;        //Current screen position.
 };
 
-extern std::vector<SnowParticle> snowvec;
+extern std::vector<SnowParticle> snowParts;
 }  // namespace EternalSnow
