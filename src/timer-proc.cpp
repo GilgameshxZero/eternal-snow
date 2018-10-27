@@ -1,4 +1,4 @@
-#include "TimerProc.h"
+#include "timer-proc.h"
 
 namespace EternalSnow
 {
@@ -17,57 +17,42 @@ namespace EternalSnow
 		static const int mpf = 1000 / fps,
 			width = GetSystemMetrics (SM_CXSCREEN),
 			height = GetSystemMetrics (SM_CYSCREEN);
-		static int max_snow = (int)width * height / 200/*20*/;
+		static int max_snow = (int)width * height / 4000/*20*/;
 		static const double snowrad = 2;
 		static int k;
 		static double newx, newy, dir, timer, absdir;
 		static DWORD finaltime;
 		static POINT cursorpos;
-
-		//ShowWindow (hwnd, SW_HIDE);
+		static double snowspeedmult, snowdownmult;
 
 		//Get direction of snow based on cursor.
 		GetCursorPos (&cursorpos);
 		dir = (double)(cursorpos.x - width / 2) / (width / 2);
 		absdir = abs (dir);
 
-		//BitBlt (hdcmem, 0, 0, width, height, hdesktop, 0, 0, SRCCOPY);
-
-		/*for (int a = 0; a < snowvec.size (); a++)
-		{
-			BitBlt (hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, snowrad * 2, snowrad * 2, hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, NOTSRCCOPY);
-		}*/
-
-		//BitBlt (hdesktop, 0, 0, width, height, hdcmem, 0, 0, SRCCOPY);
-		//BitBlt (hdcmem, 0, 0, width, height, hdesktop, 0, 0, SRCCOPY);
-		//BitBlt (desktopmem, 0, 0, width, height, hdesktop, 0, 0, SRCCOPY);
-
+		snowdownmult = (double)cursorpos.y / height * 1 + 1;
+		
 		//Clear screen.
 		FillRect (hdcmem, &screen, black);
+
+		if (snowvec.size() < max_snow) {
+			snowvec.push_back(SnowParticle());
+			snowvec.back().x = -1;
+			snowvec.back().hvel = 0;
+		}
 
 		//Draw snow circles all over the screen.
 		for (int a = 0;a < snowvec.size ();a++)
 		{
-			//BitBlt (hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, snowrad * 2, snowrad * 2, hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, NOTSRCCOPY);
-			//BitBlt (hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, snowrad * 2, snowrad * 2, hdcmem, snowvec[a].x - snowrad, snowvec[a].y - snowrad, SRCCOPY);
-
 			//Calculate new position, check if out of bounds.
 			newx = snowvec[a].x + dir * (int)(time - last_time) * snowvec[a].hvel;
-			newy = snowvec[a].y + (int)(time - last_time) * snowvec[a].vvel;
-
-			//No snow stuck on sides.
-			//if (newx == snowvec[a].x)
-			//{
-			//	if (dir >= 0)
-			//		newx++;
-			//	else
-			//		newx--;
-			//}
+			newy = snowvec[a].y + (int)(time - last_time) * snowvec[a].vvel * snowdownmult;
 
 			if (newy > height || newx < 0 || newx > width)
 			{
-				snowvec[a].vvel = (double)(rand () % 100 + 50) / 1000;
-				snowvec[a].hvel = (double)(rand () % 200 + 100) / 1000;
+				snowspeedmult = (rand() % 2) * 3 + 1;
+				snowvec[a].vvel = (double)(rand() % 100 + 50) / 1000 * snowspeedmult;
+				snowvec[a].hvel = (double)(rand() % 200 + 100) / 1000 * snowspeedmult;
 				k = rand () % (int)((snowvec[a].vvel * width + absdir * snowvec[a].hvel * height) * 10);
 				if (k < absdir * snowvec[a].hvel * height * 10)
 				{
@@ -87,37 +72,10 @@ namespace EternalSnow
 			snowvec[a].x = newx;
 			snowvec[a].y = newy;
 			Ellipse (hdcmem, newx - snowrad, newy - snowrad, newx + snowrad, newy + snowrad);
-			//BitBlt (hdcmem, newx - snowrad, newy - snowrad, snowrad * 2, snowrad * 2, desktopmem, newx - snowrad, newy - snowrad, NOTSRCCOPY);
-		}
-
-		if (snowvec.size () < max_snow)
-		{
-			snowvec.push_back (SnowParticle ());
-			snowvec.back ().vvel = (double)(rand () % 100 + 50) / 1000;
-			snowvec.back ().hvel = (double)(rand () % 200 + 100) / 1000;
-			k = rand () % (int)((snowvec.back ().vvel * width + absdir * snowvec.back ().hvel * height) * 10);
-			if (k < absdir * snowvec.back ().hvel * height * 10)
-			{
-				if (dir >= 0)
-					snowvec.back ().x = 0;
-				else
-					snowvec.back ().x = width;
-				snowvec.back ().y = height * k / (absdir * snowvec.back ().hvel * height * 10);
-			}
-			else
-			{
-				snowvec.back ().x = width * (k - absdir * snowvec.back ().hvel * height * 10) / (snowvec.back ().vvel * width * 10);
-				snowvec.back ().y = 0;
-			}
 		}
 
 		//Transfer the off-screen DC to the screen.
 		BitBlt (hdc, 0, 0, width, height, hdcmem, 0, 0, SRCCOPY);
-		//BitBlt (hdesktop, 0, 0, width, height, hdcmem, 0, 0, SRCCOPY);
-		
-		//BitBlt (mem2, 0, 0, width, height, hdcmem, 0, 0, SRCCOPY);
-
-		//ShowWindow (hwnd, SW_SHOW);
 
 		//Save the last update time.
 		last_time = time;
@@ -136,18 +94,11 @@ namespace EternalSnow
 			height = GetSystemMetrics (SM_CYSCREEN);
 		static const COLORREF snow_color = RGB (200, 200, 230);
 
-		//hdesktop = GetDC (NULL);
-
 		hdc = GetDC (hwnd);
 		hdcmem = CreateCompatibleDC (hdc);
-		//desktopmem = CreateCompatibleDC (hdc);
-		//hdcmem = CreateCompatibleDC (hdesktop);
-		//mem2 = CreateCompatibleDC (hdesktop);
 		hbmmem = CreateCompatibleBitmap (hdc, width, height);
-		//desktopbm = CreateCompatibleBitmap (hdc, width, height);
 
 		oldhand = SelectObject (hdcmem, hbmmem);
-		//olddesktopbm = SelectObject (desktopmem, desktopbm);
 
 		screen.top = 0;
 		screen.left = 0;
@@ -171,13 +122,9 @@ namespace EternalSnow
 		SelectObject (hdcmem, oldhand);
 		SelectObject (hdcmem, oldbrush);
 		SelectObject (hdcmem, oldpen);
-		//SelectObject (desktopmem, olddesktopbm);
 		DeleteObject (hbmmem);
-		//DeleteObject (desktopbm);
 		DeleteDC (hdcmem);
-		//DeleteDC (desktopmem);
 
 		ReleaseDC (hwnd, hdc);
-		//ReleaseDC (0, hdesktop);
 	}
 }

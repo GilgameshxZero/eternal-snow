@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SnowParticle.h"
+#include "snow-particle.h"
 #include <Windows.h>
 
 namespace EternalSnow

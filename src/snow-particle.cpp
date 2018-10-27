@@ -1,4 +1,4 @@
-#include "SnowParticle.h"
+#include "snow-particle.h"
 
 namespace EternalSnow
 {
