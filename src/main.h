@@ -2,6 +2,7 @@
 
 #define _MBCS
 
+#include "user-data.h"
 #include "wnd-procs.h"
 #include <ctime>
 #include <Windows.h>
@@ -9,4 +10,4 @@
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
 
-int CALLBACK WinMain (HINSTANCE hinst, HINSTANCE hprevinst, LPSTR cmdLine, int cmdShow);
+int CALLBACK WinMain (HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow);

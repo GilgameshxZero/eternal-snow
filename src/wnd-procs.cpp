@@ -18,31 +18,26 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
-    static const int SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN),
-                     SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN),
-                     SNOW_LIMIT = SCREEN_WIDTH * SCREEN_HEIGHT / 4000,
-                     FRAMES_PER_SECOND = 60,
-                     MS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
-    static const double SNOW_RADIUS = 2;
+    static UserData &userData = *reinterpret_cast<UserData *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
     static double direction, absDirection, downSpeedMod;
-
+    
     //Get direction of snow based on cursor.
     {
         static POINT cursorPos;
 
         GetCursorPos(&cursorPos);
-        direction = (double)(cursorPos.x - SCREEN_WIDTH / 2) / (SCREEN_WIDTH / 2);
+        direction = (double)(cursorPos.x - userData.SCREEN_WIDTH / 2) / (userData.SCREEN_WIDTH / 2);
         absDirection = abs(direction);
 
-        downSpeedMod = (double)cursorPos.y / SCREEN_HEIGHT + 1;
+        downSpeedMod = (double)cursorPos.y / userData.SCREEN_HEIGHT + 1;
     }
 
     //Clear screen.
     FillRect(hDCMem, &screen, blackBrush);
 
     //add more snow if there aren't enough
-    if (snowParts.size() < SNOW_LIMIT) {
+    if (snowParts.size() < userData.SNOW_LIMIT) {
         snowParts.push_back(SnowParticle());
         snowParts.back().x = -1;
         snowParts.back().horiVel = 0;
@@ -51,11 +46,11 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
     //Draw snow circles all over the screen.
     for (int a = 0; a < snowParts.size(); a++) {
         //Calculate new position, check if out of bounds.
-        snowParts[a].x += direction * MS_PER_FRAME * snowParts[a].horiVel;
-        snowParts[a].y += MS_PER_FRAME * snowParts[a].vertVel * downSpeedMod;
+        snowParts[a].x += userData.MS_PER_FRAME * snowParts[a].horiVel * direction;
+        snowParts[a].y += userData.MS_PER_FRAME * snowParts[a].vertVel * downSpeedMod;
 
         //snow is off screen, put it somewhere again
-        if (snowParts[a].y > SCREEN_HEIGHT || snowParts[a].x < 0 || snowParts[a].x > SCREEN_WIDTH) {
+        if (snowParts[a].y < 0 || snowParts[a].y > userData.SCREEN_HEIGHT || snowParts[a].x < 0 || snowParts[a].x > userData.SCREEN_WIDTH) {
             //used to initialize snow position
             static int k;
             static double snowSpeedMod;
@@ -64,24 +59,24 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
             snowParts[a].vertVel = (double)(rand() % 100 + 50) / 1000 * snowSpeedMod;
             snowParts[a].horiVel = (double)(rand() % 200 + 100) / 1000 * snowSpeedMod;
 
-            k = rand() % (int)((snowParts[a].vertVel * SCREEN_WIDTH + absDirection * snowParts[a].horiVel * SCREEN_HEIGHT) * 10);
-            if (k < absDirection * snowParts[a].horiVel * SCREEN_HEIGHT * 10) {
+            k = rand() % (int)((snowParts[a].vertVel * userData.SCREEN_WIDTH + absDirection * snowParts[a].horiVel * userData.SCREEN_HEIGHT) * 10);
+            if (k < absDirection * snowParts[a].horiVel * userData.SCREEN_HEIGHT * 10) {
                 if (direction >= 0)
                     snowParts[a].x = 0;
                 else
-                    snowParts[a].x = SCREEN_WIDTH;
-                snowParts[a].y = SCREEN_HEIGHT * k / (absDirection * snowParts[a].horiVel * SCREEN_HEIGHT * 10);
+                    snowParts[a].x = userData.SCREEN_WIDTH;
+                snowParts[a].y = userData.SCREEN_HEIGHT * k / (absDirection * snowParts[a].horiVel * userData.SCREEN_HEIGHT * 10);
             } else {
-                snowParts[a].x = SCREEN_WIDTH * (k - absDirection * snowParts[a].horiVel * SCREEN_HEIGHT * 10) / (snowParts[a].vertVel * SCREEN_WIDTH * 10);
+                snowParts[a].x = userData.SCREEN_WIDTH * (k - absDirection * snowParts[a].horiVel * userData.SCREEN_HEIGHT * 10) / (snowParts[a].vertVel * userData.SCREEN_WIDTH * 10);
                 snowParts[a].y = 0;
             }
         }
 
-        Ellipse(hDCMem, snowParts[a].x - SNOW_RADIUS, snowParts[a].y - SNOW_RADIUS, snowParts[a].x + SNOW_RADIUS, snowParts[a].y + SNOW_RADIUS);
+        Ellipse(hDCMem, snowParts[a].x - userData.SNOW_RADIUS, snowParts[a].y - userData.SNOW_RADIUS, snowParts[a].x + userData.SNOW_RADIUS, snowParts[a].y + userData.SNOW_RADIUS);
     }
 
     //Transfer the off-screen DC to the screen.
-    BitBlt(hDC, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, hDCMem, 0, 0, SRCCOPY);
+    BitBlt(hDC, 0, 0, userData.SCREEN_WIDTH, userData.SCREEN_HEIGHT, hDCMem, 0, 0, SRCCOPY);
 }
 
 void InitDraw(HWND hWnd) {
