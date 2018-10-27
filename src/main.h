@@ -2,6 +2,8 @@
 
 #define _MBCS
 
+#include "rain-aeternum/rain-libraries.h"
+
 #include "user-data.h"
 #include "wnd-procs.h"
 #include <ctime>
