@@ -1,24 +1,29 @@
 #include "main.h"
 
-int CALLBACK WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow) {
+int main(int argc, const char *argv[]) {
     EternalSnow::UserData ud;
 
     ud.CONFIG_LOC = "../config/eternal-snow.cfg";
 
     std::map<std::string, std::string> config = Rain::readParameterFile(ud.CONFIG_LOC);
     ud.FRAMES_PER_SECOND = Rain::strToT<int>(config["frames-per-second"]);
-    ud.SNOW_LIMIT_SCALING = Rain::strToT<int>(config["snow-limit-scaling"]);
-    ud.SNOW_RADIUS = Rain::strToT<int>(config["snow-radius"]);
+    ud.SNOW_LIMIT_SCALING = Rain::strToT<double>(config["snow-limit-scaling"]);
+    ud.SNOW_RADIUS = Rain::strToT<double>(config["snow-radius"]);
     ud.SNOW_COLOR_HEX = config["snow-color-hex"];
+    ud.SNOW_SPEED_FAST = Rain::strToT<double>(config["snow-speed-fast"]);
 
     ud.SCREEN_WIDTH = GetSystemMetrics(SM_CXSCREEN);
     ud.SCREEN_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
     ud.MS_PER_FRAME = 1000 / ud.FRAMES_PER_SECOND;
-    ud.SNOW_LIMIT = ud.SCREEN_WIDTH * ud.SCREEN_HEIGHT / 4000 * ud.SNOW_LIMIT_SCALING;
+    ud.SNOW_LIMIT = ud.SCREEN_WIDTH * ud.SCREEN_HEIGHT / 20000 * ud.SNOW_LIMIT_SCALING;
     ud.TIMER_ID = 1;
     ud.CLASS_NAME = "EternalSnow Main Window";
     ud.SNOW_COLOR = Rain::colorFromHex(ud.SNOW_COLOR_HEX);
     ud.BLACK_COLOR = RGB(0, 0, 1);
+    ud.hInst = GetModuleHandle(NULL);
+
+    //hide console
+    FreeConsole();
 
     //Randomize.
     srand(time(NULL));
@@ -30,7 +35,7 @@ int CALLBACK WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cm
         wndClass.lpfnWndProc = EternalSnow::MainWndProc;
         wndClass.cbClsExtra = 0;
         wndClass.cbWndExtra = 0;
-        wndClass.hInstance = hInst;
+        wndClass.hInstance = ud.hInst;
         wndClass.hIcon = NULL;
         wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
         wndClass.hbrBackground = NULL;
@@ -43,7 +48,7 @@ int CALLBACK WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cm
         }
     }
 
-    HWND mainWnd = CreateWindowEx(WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW, ud.CLASS_NAME.c_str(), "", WS_POPUP, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, NULL, NULL, hInst, NULL);
+    HWND mainWnd = CreateWindowEx(WS_EX_NOACTIVATE | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TRANSPARENT | WS_EX_TOOLWINDOW, ud.CLASS_NAME.c_str(), "", WS_POPUP, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, NULL, NULL, ud.hInst, NULL);
 
     if (!mainWnd) {
         return -1;

@@ -4,21 +4,25 @@
 #include <vector>
 #include <Windows.h>
 
+#include "snow-particle.h"
+
 namespace EternalSnow {
 struct UserData {
     int SCREEN_WIDTH,
         SCREEN_HEIGHT,
-        SNOW_LIMIT_SCALING,
         SNOW_LIMIT,
         FRAMES_PER_SECOND,
         MS_PER_FRAME,
         TIMER_ID;
-    double SNOW_RADIUS;
+    double SNOW_RADIUS,
+        SNOW_LIMIT_SCALING,
+        SNOW_SPEED_FAST;
     std::string CLASS_NAME,
         CONFIG_LOC,
         SNOW_COLOR_HEX;
     COLORREF SNOW_COLOR,
         BLACK_COLOR;
+    HINSTANCE hInst;
 
     std::vector<SnowParticle> snowParts;
 

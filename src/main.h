@@ -4,12 +4,12 @@
 
 #include "rain-aeternum/rain-libraries.h"
 
+#include <Windows.h>
+#include <ctime>
 #include "user-data.h"
 #include "wnd-procs.h"
-#include <ctime>
-#include <Windows.h>
 
 #pragma comment(lib, "user32.lib")
 #pragma comment(lib, "gdi32.lib")
 
-int CALLBACK WinMain (HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR cmdLine, int cmdShow);
+int main(int argc, const char *argv[]);

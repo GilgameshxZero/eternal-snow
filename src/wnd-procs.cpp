@@ -16,6 +16,7 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
     static double direction, absDirection, vertVelMod;
     
     //Get direction of snow based on cursor.
+    //todo: update mouse position only when mouse moved
     {
         static POINT cursorPos;
 
@@ -48,7 +49,7 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
             static int k;
             static double snowSpeedMod;
 
-            snowSpeedMod = (rand() % 2) * 3 + 1;
+            snowSpeedMod = (rand() % 2) * ud.SNOW_SPEED_FAST + 1;
             ud.snowParts[a].vertVel = (double)(rand() % 100 + 50) / 1000 * snowSpeedMod;
             ud.snowParts[a].horiVel = (double)(rand() % 200 + 100) / 1000 * snowSpeedMod;
 
