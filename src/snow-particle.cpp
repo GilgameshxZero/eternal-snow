@@ -1,6 +1,5 @@
 #include "snow-particle.h"
 
-namespace EternalSnow
-{
-	std::vector<SnowParticle> snowvec;
+namespace EternalSnow {
+std::vector<SnowParticle> snowvec;
 }
