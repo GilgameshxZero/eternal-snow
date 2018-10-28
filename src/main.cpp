@@ -120,6 +120,9 @@ int main(int argc, const char *argv[]) {
     ud.oldBrush = static_cast<HBRUSH>(SelectObject(ud.hDCMem, ud.snowBrush));
     ud.oldPen = static_cast<HPEN>(SelectObject(ud.hDCMem, ud.snowPen));
 
+    FillRect(ud.hDCMem, &ud.screenRect, ud.blackBrush);
+    BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
+
     {
         MSG msg;
         while (GetMessage(&msg, NULL, 0, 0)) {

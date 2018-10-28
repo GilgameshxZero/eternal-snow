@@ -25,7 +25,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                         GetCursorPos(&ud.mousePos);
                         ud.hMouseLLHook = SetWindowsHookEx(WH_MOUSE_LL, EternalSnow::MouseLLHookProc, NULL, NULL);
-    
+
                         ud.paused = false;
                     }
                     break;
@@ -34,6 +34,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     PostQuitMessage(0);
                     break;
             }
+            break;
+
+        case WM_PAINT:
             break;
 
         default:
@@ -65,8 +68,15 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
         ud.snowParts.back().horiVel = 0;
     }
 
+    static HRGN redrawRgn;
+    redrawRgn = CreateRectRgn(0, 0, 0, 0);
+
     //Draw snow circles all over the screen.
     for (int a = 0; a < ud.snowParts.size(); a++) {
+        static double oldx, oldy;
+        oldx = ud.snowParts[a].x;
+        oldy = ud.snowParts[a].y;
+
         //Calculate new position, check if out of bounds.
         ud.snowParts[a].x += ud.MS_PER_FRAME * ud.snowParts[a].horiVel * direction;
         ud.snowParts[a].y += ud.MS_PER_FRAME * ud.snowParts[a].vertVel * vertVelMod;
@@ -95,9 +105,23 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
         }
 
         Ellipse(ud.hDCMem, ud.snowParts[a].x - ud.SNOW_RADIUS, ud.snowParts[a].y - ud.SNOW_RADIUS, ud.snowParts[a].x + ud.SNOW_RADIUS, ud.snowParts[a].y + ud.SNOW_RADIUS);
+
+        static HRGN newRgn;
+        newRgn = CreateRectRgn(oldx - ud.SNOW_RADIUS,
+                               oldy - ud.SNOW_RADIUS,
+                               oldx + ud.SNOW_RADIUS,
+                               oldy + ud.SNOW_RADIUS);
+        CombineRgn(redrawRgn, redrawRgn, newRgn, RGN_OR);
+        DeleteObject(newRgn);
+        newRgn = CreateRectRgn(ud.snowParts[a].x - ud.SNOW_RADIUS,
+                               ud.snowParts[a].y - ud.SNOW_RADIUS,
+                               ud.snowParts[a].x + ud.SNOW_RADIUS,
+                               ud.snowParts[a].y + ud.SNOW_RADIUS);
+        CombineRgn(redrawRgn, redrawRgn, newRgn, RGN_OR);
+        DeleteObject(newRgn);
     }
 
-    //Transfer the off-screen DC to the screen.
+    SelectClipRgn(ud.hDC, updateRgn);
     BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
 }
 LRESULT CALLBACK MouseLLHookProc(int nCode, WPARAM wParam, LPARAM lParam) {
