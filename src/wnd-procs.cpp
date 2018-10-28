@@ -2,7 +2,40 @@
 
 namespace EternalSnow {
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    UserData &ud = *reinterpret_cast<UserData *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+
     switch (uMsg) {
+        case WM_APP:
+            //tray message, should not be called until ud is valid
+            switch (lParam) {
+                case WM_LBUTTONUP:
+                    if (!ud.paused) {
+                        //pause the timer
+                        KillTimer(hWnd, ud.TIMER_ID);
+
+                        FillRect(ud.hDCMem, &ud.screenRect, ud.blackBrush);
+                        BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
+
+                        UnhookWindowsHookEx(ud.hMouseLLHook);
+
+                        ud.paused = true;
+                    } else {
+                        //resume
+                        SetTimer(hWnd, ud.TIMER_ID, ud.MS_PER_FRAME, EternalSnow::TimerProc);
+
+                        GetCursorPos(&ud.mousePos);
+                        ud.hMouseLLHook = SetWindowsHookEx(WH_MOUSE_LL, EternalSnow::MouseLLHookProc, NULL, NULL);
+    
+                        ud.paused = false;
+                    }
+                    break;
+                case WM_RBUTTONUP:
+                    //exit the program
+                    PostQuitMessage(0);
+                    break;
+            }
+            break;
+
         default:
             break;
     }
@@ -14,18 +47,13 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
     static UserData &ud = *reinterpret_cast<UserData *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
     static double direction, absDirection, vertVelMod;
-    
+
     //Get direction of snow based on cursor.
     //todo: update mouse position only when mouse moved
-    {
-        static POINT cursorPos;
+    direction = (double)(ud.mousePos.x - ud.SCREEN_WIDTH / 2) / (ud.SCREEN_WIDTH / 2);
+    absDirection = abs(direction);
 
-        GetCursorPos(&cursorPos);
-        direction = (double)(cursorPos.x - ud.SCREEN_WIDTH / 2) / (ud.SCREEN_WIDTH / 2);
-        absDirection = abs(direction);
-
-        vertVelMod = (double)cursorPos.y / ud.SCREEN_HEIGHT + 1;
-    }
+    vertVelMod = (double)ud.mousePos.y / ud.SCREEN_HEIGHT + 1;
 
     //Clear screen.
     FillRect(ud.hDCMem, &ud.screenRect, ud.blackBrush);
@@ -71,5 +99,15 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
 
     //Transfer the off-screen DC to the screen.
     BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
+}
+LRESULT CALLBACK MouseLLHookProc(int nCode, WPARAM wParam, LPARAM lParam) {
+    if (nCode < 0)
+        return CallNextHookEx(NULL, nCode, wParam, lParam);
+    if (wParam != WM_MOUSEMOVE)
+        return CallNextHookEx(NULL, nCode, wParam, lParam);
+
+    pud->mousePos = reinterpret_cast<MSLLHOOKSTRUCT *>(lParam)->pt;
+
+    return CallNextHookEx(NULL, nCode, wParam, lParam);
 }
 }  // namespace EternalSnow

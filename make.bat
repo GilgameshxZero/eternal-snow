@@ -1,6 +1,6 @@
 cd src
 call ".\build-id-inc.bat"
-REM call rc /Fo".\..\obj\rc.res" rc.rc
+call rc /Fo".\..\obj\rc.res" rc.rc
 call cl ^
 /EHsc ^
 /Fo".\..\obj\\" ^
@@ -11,9 +11,11 @@ call cl ^
 /MT ^
 /MP ^
 /incremental ^
+.\..\obj\rc.res ^
 .\main.cpp ^
-.\wnd-procs.cpp ^
 .\snow-particle.cpp ^
+.\user-data.cpp ^
+.\wnd-procs.cpp ^
 .\rain-aeternum\algorithm-libraries.cpp ^
 .\rain-aeternum\gdi-plus-include.cpp ^
 .\rain-aeternum\network-base.cpp ^
