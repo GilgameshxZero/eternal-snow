@@ -99,9 +99,6 @@ int main(int argc, const char *argv[]) {
     //setup timer
     SetTimer(mainWnd, ud.TIMER_ID, ud.MS_PER_FRAME, EternalSnow::TimerProc);
 
-    //Set black as the transparent color.
-    SetLayeredWindowAttributes(mainWnd, ud.BLACK_COLOR, 0, LWA_COLORKEY);
-
     //setup drawing-related handles
     ud.hDC = GetDC(mainWnd);
     ud.hDCMem = CreateCompatibleDC(ud.hDC);
@@ -109,10 +106,7 @@ int main(int argc, const char *argv[]) {
 
     ud.oldHBM = static_cast<HBITMAP>(SelectObject(ud.hDCMem, ud.hBMMem));
 
-    ud.screenRect.top = ud.screenRect.left = 0;
-    ud.screenRect.bottom = ud.SCREEN_HEIGHT;
-    ud.screenRect.right = ud.SCREEN_WIDTH;
-
+    ud.screenRect = {0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT};
     ud.snowBrush = CreateSolidBrush(ud.SNOW_COLOR);
     ud.blackBrush = CreateSolidBrush(ud.BLACK_COLOR);
     ud.snowPen = CreatePen(PS_SOLID, 1, ud.SNOW_COLOR);

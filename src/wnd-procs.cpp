@@ -14,7 +14,9 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                         KillTimer(hWnd, ud.TIMER_ID);
 
                         FillRect(ud.hDCMem, &ud.screenRect, ud.blackBrush);
-                        BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
+                        static POINT zeroPt = {0, 0};
+                        static SIZE fullSz = {ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT};
+                        UpdateLayeredWindow(hWnd, ud.hDC, &zeroPt, &fullSz, ud.hDCMem, &zeroPt, ud.BLACK_COLOR, NULL, ULW_COLORKEY);
 
                         UnhookWindowsHookEx(ud.hMouseLLHook);
 
@@ -98,7 +100,9 @@ VOID CALLBACK TimerProc(HWND hWnd, UINT uMsg, UINT_PTR eventId, DWORD time) {
     }
 
     //Transfer the off-screen DC to the screen.
-    BitBlt(ud.hDC, 0, 0, ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT, ud.hDCMem, 0, 0, SRCCOPY);
+    static POINT zeroPt = {0, 0};
+    static SIZE fullSz = {ud.SCREEN_WIDTH, ud.SCREEN_HEIGHT};
+    UpdateLayeredWindow(hWnd, ud.hDC, &zeroPt, &fullSz, ud.hDCMem, &zeroPt, ud.BLACK_COLOR, NULL, ULW_COLORKEY);
 }
 LRESULT CALLBACK MouseLLHookProc(int nCode, WPARAM wParam, LPARAM lParam) {
     if (nCode < 0)
