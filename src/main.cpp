@@ -5,7 +5,7 @@ int main(int argc, const char *argv[]) {
     EternalSnow::pud = &ud;
 
     //configuration
-    ud.CONFIG_LOC = "../config/eternal-snow.cfg";
+    ud.CONFIG_LOC = "../config/config.ini";
 
     std::map<std::string, std::string> config = Rain::readParameterFile(ud.CONFIG_LOC);
     ud.FRAMES_PER_SECOND = Rain::strToT<int>(config["frames-per-second"]);

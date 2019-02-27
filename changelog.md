@@ -1,10 +1,15 @@
 # Changelog
 
+## 1.1.0
+
+* Updated `rain-aeternum` library to the latest version.
+* Moved around files and build paths.
+
 ## 1.0.0
 
 * Revamped repository and code to conform to common standards.
 * New compile process.
-* Included rain-aeternum library.
+* Included `rain-aeternum` library.
 * Added icon & versioning.
 * Added tray icon to pause/exit.
 * Moved options to config.

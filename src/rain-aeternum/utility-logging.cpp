@@ -43,7 +43,8 @@ namespace Rain {
 			ssi.oshRepPipeWr = oshRepPipeWr;
 			ssi.repPipeRd = rd;
 			ssi.repPipeWr = wr;
-			ssi.hThread = CreateThread(NULL, 0, this->stdSrcRedirectThread, reinterpret_cast<LPVOID>(&ssi.thParam), 0, NULL);
+			ssi.hStdThread = std::thread(LogStream::stdSrcRedirectThread, reinterpret_cast<LPVOID>(&ssi.thParam));
+			ssi.hThread = ssi.hStdThread.native_handle();
 		} else if (!enable && ret) {
 			fflush(stdFilePtr);
 
@@ -54,9 +55,9 @@ namespace Rain {
 			ssi.thParam.running = false;
 			CancelSynchronousIo(ssi.hThread);
 			WaitForSingleObject(ssi.hThread, INFINITE);
+			ssi.hStdThread.join();
 			_close(ssi.oshRepPipeWr); //calls CloseHandle on ssi.repPipeWr
 			CloseHandle(ssi.repPipeRd);
-			CloseHandle(ssi.hThread);
 
 			//reset std handles and free memory
 			this->stdSrcMap.erase(stdHandle); //erase here, so that we can log everything in stdout if we are logging to stdout as well
@@ -73,24 +74,24 @@ namespace Rain {
 
 		logMutex.lock();
 
-		header = Rain::getTime() + " " + Rain::tToStr(s->length()) + "\r\n";
+		header = Rain::getTime() + " " + Rain::tToStr(s->length()) + Rain::CRLF;
 		if (this->outputStdout) {
 			//if STD_OUTPUT_HANDLE is being logged, then temporarily replace with original output handles while outputting log, so that we don't log indefinitely
 			auto itMap = this->stdSrcMap.find(STD_OUTPUT_HANDLE);
 			if (itMap != this->stdSrcMap.end()) {
-				fflush(stdout);
+				std::cout.flush();
 				_dup2(itMap->second->oshOrigStdSrc, _fileno(stdout));
 			}
-			Rain::tsCout(header, s->substr(0, this->stdoutTrunc == 0 ? std::string::npos : this->stdoutTrunc), "\r\n\r\n");
+			Rain::tsCout(header, s->substr(0, this->stdoutTrunc == 0 ? std::string::npos : this->stdoutTrunc), CRLF, CRLF);
 			if (itMap != this->stdSrcMap.end()) {
-				fflush(stdout);
+				std::cout.flush();
 				_dup2(itMap->second->oshRepPipeWr, _fileno(stdout));
 			}
 		}
 		for (std::string file : this->fileDst) {
 			Rain::printToFile(file, &header, true);
 			Rain::printToFile(file, s, true);
-			Rain::printToFile(file, "\r\n\r\n", true);
+			Rain::printToFile(file, CRLF + CRLF, true);
 		}
 
 		logMutex.unlock();

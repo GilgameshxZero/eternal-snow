@@ -12,7 +12,6 @@ Implements class ClientSocketManager, which maintains a socket connection to an 
 #include "network-recv-thread.h"
 #include "network-socket-manager.h"
 #include "network-utility.h"
-
 #include "utility-logging.h"
 
 #include <algorithm>
@@ -22,8 +21,8 @@ Implements class ClientSocketManager, which maintains a socket connection to an 
 
 namespace Rain {
 	class ClientSocketManager : public SocketManager {
-		public:
-		struct ClientSocketManagerDelegateHandlerParam {
+	public:
+		struct DelegateHandlerParam {
 			//the current csm
 			ClientSocketManager *csm;
 
@@ -68,6 +67,9 @@ namespace Rain {
 		//returns value of connected port, or -1 if not connected
 		DWORD getConnectedPort();
 
+		//returns domain name or IP, whichever was set in setClientTarget, or "" if not connected
+		std::string getTargetIP();
+
 		//returns current socket immediately
 		SOCKET &getSocket();
 
@@ -76,12 +78,18 @@ namespace Rain {
 		//if called, will terminate current connection
 		void setClientTarget(std::string ipAddress, DWORD lowPort, DWORD highPort);
 
+		//if disconnected, start trying to connect again
+		void retryConnect();
+
+		//whether to retry connection when disconnect; returns previous value
+		bool setRetryOnDisconnect(bool value);
+
 		//set event handlers in addition to those of class
 		//pass NULL to any parameter to remove the custom handler
 		void setEventHandlers(RecvHandlerParam::EventHandler onConnect,
-							  RecvHandlerParam::EventHandler onMessage,
-							  RecvHandlerParam::EventHandler onDisconnect,
-							  void *funcParam);
+			RecvHandlerParam::EventHandler onMessage,
+			RecvHandlerParam::EventHandler onDisconnect,
+			void *funcParam);
 
 		//set reconnect attempt time max from default 3000
 		//will attempt to reconnect more often at the beginning, then slow down exponentially
@@ -96,7 +104,14 @@ namespace Rain {
 		//inheirited from SocketManager; sets logging on and off for communications on this socket; pass NULL to disable
 		bool setLogging(void *logger);
 
-		private:
+	protected:
+		//have the message handlers be protected so that derived classes can access them
+		RecvHandlerParam::EventHandler onConnectDelegate, onMessageDelegate, onDisconnectDelegate;
+
+		//parameter passed to delegate handlers
+		DelegateHandlerParam csmdhParam;
+
+	private:
 		SOCKET socket;
 		std::queue<std::string> messageQueue;
 		bool blockSendRawMessage;
@@ -104,10 +119,12 @@ namespace Rain {
 		int socketStatus;
 		std::string ipAddress;
 		DWORD lowPort, highPort;
-		RecvHandlerParam::EventHandler onConnectDelegate, onMessageDelegate, onDisconnectDelegate;
 		DWORD msReconnectWaitMax, msSendWaitMax;
 		std::size_t recvBufLen;
 		LogStream *logger;
+
+		//set to true when destructor called; terminate send thread here
+		bool destructing;
 
 		//current wait between connect attempts
 		DWORD msReconnectWait;
@@ -124,11 +141,11 @@ namespace Rain {
 		//triggerred when message queue is empty
 		HANDLE messageDoneEvent;
 
+		//triggered when message queue not empty again
+		HANDLE messageToSendEvent;
+
 		//recvThread parameter associated with the current recvThread
 		Rain::RecvHandlerParam rParam;
-
-		//parameter passed to delegate handlers
-		ClientSocketManagerDelegateHandlerParam csmdhParam;
 
 		//handle to the connect thread and send message thread
 		//close when threads end by the thread
@@ -136,6 +153,12 @@ namespace Rain {
 
 		//event which will be set when there have been as many calls to onDisconnect as there have been to onConnect
 		HANDLE recvExitComplete;
+
+		//lock this when modifying message queue
+		std::mutex queueMutex;
+
+		//if set to true, CSM will attempt to reconnect on disconnect ONCE
+		bool retryOnDisconnect;
 
 		//disconnects socket immediately, regardless of state
 		//sets state as -1

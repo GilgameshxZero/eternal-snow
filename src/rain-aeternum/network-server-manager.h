@@ -21,9 +21,9 @@ Implements thread for listening for socket connections and spawning recvThreads.
 namespace Rain {
 	//manages a single server/client connection, from the server-end
 	class ServerSocketManager : public SocketManager {
-		public:
+	public:
 		//parameter passed to delegate handlers
-		struct ServerSocketManagerDelegateHandlerParam {
+		struct DelegateHandlerParam {
 			//this object
 			ServerSocketManager *ssm;
 
@@ -42,10 +42,10 @@ namespace Rain {
 
 		//ServerSocketManager must be initialized with a ServerManager parent and default event handlers set by the ServerManager's setEventHandlers
 		ServerSocketManager(SOCKET *cSocket,
-							RecvHandlerParam::EventHandler onConnect,
-							RecvHandlerParam::EventHandler onMessage,
-							RecvHandlerParam::EventHandler onDisconnect,
-							void *funcParam);
+			RecvHandlerParam::EventHandler onConnect,
+			RecvHandlerParam::EventHandler onMessage,
+			RecvHandlerParam::EventHandler onDisconnect,
+			void *funcParam);
 		~ServerSocketManager();
 
 		//sends raw message over socket, without queueing or blocking
@@ -57,9 +57,9 @@ namespace Rain {
 
 		//set the delegate event handlers
 		void setEventHandlers(RecvHandlerParam::EventHandler onConnect,
-							  RecvHandlerParam::EventHandler onMessage,
-							  RecvHandlerParam::EventHandler onDisconnect,
-							  void *funcParam);
+			RecvHandlerParam::EventHandler onMessage,
+			RecvHandlerParam::EventHandler onDisconnect,
+			void *funcParam);
 
 		//inheirited from SocketManager; sets logging on and off for communications on this socket; pass NULL to disable
 		bool setLogging(void *logger);
@@ -68,12 +68,12 @@ namespace Rain {
 		//TODO: fix this
 		std::tuple<RecvHandlerParam::EventHandler, RecvHandlerParam::EventHandler, RecvHandlerParam::EventHandler> getInternalHandlers();
 
-		private:
+	private:
 		SOCKET *socket;
 		LogStream *logger;
 
 		//parameter to be passed to delegates
-		ServerSocketManagerDelegateHandlerParam ssmdhParam;
+		DelegateHandlerParam ssmdhParam;
 
 		//recvThread parameter associated with the current recvThread
 		RecvHandlerParam::EventHandler onConnectDelegate, onMessageDelegate, onDisconnectDelegate;
@@ -88,17 +88,17 @@ namespace Rain {
 	//spawns a ServerSocketManager for each new connection
 	//A single server should accept a single type of client
 	class ServerManager {
-		public:
+	public:
 		typedef void(*NewClientFunc)(ServerSocketManager *);
 
 		//passed to SM's event handlers
 		//also used as linked list node for all spawned ServerSocketManagers
-		struct ServerManagerRecvThreadParam {
+		struct RecvThreadParam {
 			//used to call the event handler delegates in the SSM
 			ServerSocketManager *ssm;
 
 			//wraps SSM in a linked list node
-			ServerManagerRecvThreadParam *prev, *next;
+			RecvThreadParam *prev, *next;
 
 			//locked when changing linked list
 			std::mutex *llMutex;
@@ -133,24 +133,26 @@ namespace Rain {
 
 		//set the default delegate event handler for spawned recvThreads
 		void setEventHandlers(RecvHandlerParam::EventHandler onConnect,
-							  RecvHandlerParam::EventHandler onMessage,
-							  RecvHandlerParam::EventHandler onDisconnect,
-							  void *funcParam);
+			RecvHandlerParam::EventHandler onMessage,
+			RecvHandlerParam::EventHandler onDisconnect,
+			void *funcParam);
 
 		//sets buffer length of spawned recvThreads
 		std::size_t setRecvBufLen(std::size_t newLen);
 
-		private:
+	protected:
+		//default handlers and params which ServerSocketManager should use
+		//protected so that 'headed' server manager can change these
+		RecvHandlerParam::EventHandler onConnectDelegate, onMessageDelegate, onDisconnectDelegate;
+		void *funcParam;
+
+	private:
 		SOCKET socket;
 		DWORD listeningPort;
 		DWORD lowPort, highPort;
 		NewClientFunc newClientCall;
 		std::size_t recvBufLen;
 		HANDLE ltEvent;
-
-		//default handlers and params which ServerSocketManager should use
-		RecvHandlerParam::EventHandler onConnectDelegate, onMessageDelegate, onDisconnectDelegate;
-		void *funcParam;
 
 		void disconnectSocket();
 

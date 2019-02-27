@@ -1,8 +1,6 @@
 /*
 Standard
-*/
 
-/*
 All utilities dealing with files.
 
 When in doubt: directories are specified with an ending '/'. Sometimes functions may not work if this format is not followed.
@@ -17,17 +15,17 @@ Windows-specific.
 
 #pragma once
 
-#include "windows-lam-include.h"
 #include "utility-string.h"
+#include "windows-lam-include.h"
 
 #include <cstdlib>
 #include <fstream>
-#include <string>
-#include <sys/stat.h>
-#include <vector>
 #include <map>
 #include <set>
 #include <sstream>
+#include <string>
+#include <sys/stat.h>
+#include <vector>
 
 namespace Rain {
 	//turn a string into LPCWSTR with a "\\?\" prefix, for use in long paths unicode functions
@@ -62,8 +60,9 @@ namespace Rain {
 	//gets all files and directories under a directory, recursively
 	//works with unicode/multibyte UTF8
 	//use absolute paths in ignore
-	std::vector<std::string> getFilesRec(std::string directory, std::string format = "*", std::set<std::string> *ignore = NULL);
-	std::vector<std::string> getDirsRec(std::string directory, std::string format = "*", std::set<std::string> *ignore = NULL);
+	//can specify only directories or files that we want; overwritten by ignore
+	std::vector<std::string> getFilesRec(std::string directory, std::string format = "*", std::set<std::string> *ignore = NULL, std::set<std::string> *want = NULL);
+	std::vector<std::string> getDirsRec(std::string directory, std::string format = "*", std::set<std::string> *ignore = NULL, std::set<std::string> *want = NULL);
 
 	//creates parent directories until specified directory created
 	void createDirRec(std::string dir);
@@ -72,7 +71,7 @@ namespace Rain {
 	//works with unicode/multibyte UTF8
 	//second argument specifies files/directories to not remove; use \ end to specify dir
 	//use absolute paths in ignore
-	void rmDirRec(std::string dir, std::set<std::string> *ignore = NULL);
+	void rmDirRec(std::string dir, std::set<std::string> *ignore = NULL, std::set<std::string> *want = NULL);
 
 	//copies directory structure over, replacing any files in the destination, but not deleting any unrelated files
 	void cpyDirRec(std::string src, std::string dst, std::set<std::string> *ignore = NULL);
@@ -92,18 +91,13 @@ namespace Rain {
 	void printToFile(std::string filename, std::string *output, bool append = false);
 	void printToFile(std::string filename, std::string output, bool append = false);
 
-	//file size in bytes
 	std::size_t getFileSize(std::string file);
+	time_t getFileLastModifyTime(std::string file);
 
 	//put the whole file into a string
 	//returns nothing, because copy constructor might be expensive
 	void readFileToStr(std::string filePath, std::string &fileData);
 
-	//multiple lines, each into a separate string in the vector.
-	std::vector<std::string> readMultilineFile(std::string filePath);
-
-	//read parameters from standard parameter string, organized in lines (terminated by \n) of key:value, possibly with whitespace inbetween elements
-	std::map<std::string, std::string> readParameterStream(std::stringstream &paramStream);
-	std::map<std::string, std::string> readParameterString(std::string paramString);
-	std::map<std::string, std::string> readParameterFile(std::string filePath);
+	bool isFileWritable(std::string file);
+	bool isDirEmpty(std::string dir);
 }

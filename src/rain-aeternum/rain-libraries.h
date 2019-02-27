@@ -10,6 +10,7 @@ If possible, Rain functions should be provided in two versions: for pointer para
 To use the libraries, all files in the Rain library directory must be added to the project (externally is fine). To include this file, either some project settings must be changed or use a relative/absolute include path. Suggestion: place Rain library directory (e.g. RainAeternum/RainLibrary3) under solution directory.
 */
 
+//these includes must be in this order
 #include "network-wsa-include.h"
 #include "gdi-plus-include.h"
 #include "windows-lam-include.h"
@@ -18,3 +19,7 @@ To use the libraries, all files in the Rain library directory must be added to t
 #include "algorithm-libraries.h"
 #include "network-libraries.h"
 #include "utility-libraries.h"
+
+#include "condition-variable.h"
+#include "config.h"
+#include "timer.h"

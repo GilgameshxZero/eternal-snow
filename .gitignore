@@ -1,8 +1,9 @@
-*.aps
-*.user
-*.exe
+**/.vscode/
+**/.vs/
 
-.vs
-.vscode
-obj
-bin
+**/.aps
+**/.user
+**/.exe
+
+/bin/
+/obj/

@@ -12,7 +12,7 @@ Defines abstract class which communicates over an already-connected socket, and 
 
 namespace Rain {
 	class SocketManager {
-		public:
+	public:
 		virtual void sendRawMessage(std::string request) = 0;
 		virtual void sendRawMessage(std::string *request) = 0;
 

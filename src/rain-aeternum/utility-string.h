@@ -10,14 +10,17 @@ Compatiable with all OS.
 
 #include "windows-lam-include.h"
 
-#include <iomanip> //encodeURL and decodeURL
-#include <sstream>
-#include <string>
 #include <algorithm> 
 #include <cctype>
+#include <iomanip>
+#include <sstream>
+#include <string>
 #include <vector>
 
 namespace Rain {
+	extern const std::string CRLF,
+		LF;
+
 	//converts from any type to string using stringstream
 	template <typename T>
 	std::string tToStr(T x) {

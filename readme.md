@@ -1,4 +1,3 @@
-# eternal-snow
+# Eternal Snow
 
-by Yang Yan.
-
+Short script to place dynamic snowflakes over the desktop.

@@ -1,10 +1,13 @@
 #include "utility-string.h"
 
 namespace Rain {
+	const std::string CRLF = "\r\n",
+		LF = "\n";
+
 	std::wstring mbStrToWStr(std::string s) {
-		static wchar_t *buffer;
-		static int bytes;
-		static std::wstring ret;
+		wchar_t *buffer;
+		int bytes;
+		std::wstring ret;
 
 		buffer = new wchar_t[s.length()];
 		bytes = MultiByteToWideChar(CP_UTF8, 0, s.c_str(), static_cast<int>(s.length()), buffer, static_cast<int>(s.length()));
@@ -13,9 +16,9 @@ namespace Rain {
 		return ret;
 	}
 	std::string wStrToMBStr(std::wstring s) {
-		static char *buffer;
-		static int bytes;
-		static std::string ret;
+		char *buffer;
+		int bytes;
+		std::string ret;
 
 		buffer = new char[s.length() * 4];
 		bytes = WideCharToMultiByte(CP_UTF8, 0, s.c_str(), static_cast<int>(s.length()), buffer, static_cast<int>(s.length() * 4), NULL, NULL);
@@ -73,7 +76,7 @@ namespace Rain {
 			return c - 'a' + 26;
 	}
 	std::string strEncodeB64(const std::string *str) {
-		static std::string b64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		static const std::string b64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		std::string out;
 		int val = 0, valb = -6;
 		for (unsigned char c : *str) {
@@ -92,7 +95,7 @@ namespace Rain {
 		return strEncodeB64(&str);
 	}
 	std::string strDecodeB64(const std::string *str) {
-		static std::string b64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		static const std::string b64Map = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 		std::string out;
 		std::vector<int> T(256, -1);
 		for (int i = 0; i < 64; i++) T[b64Map[i]] = i;
@@ -128,7 +131,7 @@ namespace Rain {
 
 			// Any other characters are percent-encoded
 			escaped << std::uppercase;
-			escaped << '%' << std::setw(2) << int((unsigned char) c);
+			escaped << '%' << std::setw(2) << int((unsigned char)c);
 			escaped << std::nouppercase;
 		}
 
@@ -221,7 +224,7 @@ namespace Rain {
 	std::string strDecodeToHex(std::string *data) {
 		std::stringstream ss;
 		for (std::size_t a = 0; a < data->length(); a++) {
-			static std::pair<char, char> conv;
+			std::pair<char, char> conv;
 			conv = chrToHex((*data)[a]);
 			ss << conv.first << conv.second;
 		}

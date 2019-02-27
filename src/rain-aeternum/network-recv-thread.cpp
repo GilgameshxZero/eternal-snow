@@ -1,19 +1,6 @@
 #include "network-recv-thread.h"
 
 namespace Rain {
-	RecvHandlerParam::RecvHandlerParam() {
-	}
-
-	RecvHandlerParam::RecvHandlerParam(SOCKET *socket, std::string *message, std::size_t buflen, void *funcParam, EventHandler onConnect, EventHandler onMessage, EventHandler onDisconnect) {
-		this->socket = socket;
-		this->message = message;
-		this->bufLen = bufLen;
-		this->funcParam = funcParam;
-		this->onConnect = onConnect;
-		this->onMessage = onMessage;
-		this->onDisconnect = onDisconnect;
-	}
-
 	DWORD WINAPI recvThread(LPVOID lpParameter) {
 		RecvHandlerParam *recvparam = reinterpret_cast<RecvHandlerParam *>(lpParameter);
 		char *buffer = new char[recvparam->bufLen];
@@ -51,7 +38,7 @@ namespace Rain {
 		SOCKET *connection,
 		std::string *message, //where the message is stored each time onMessage is called
 		int buflen, //the buffer size of the receive function
-		void *funcparam, //additional parameter to pass to the functions onMessage and onDisconnect
+		void *funcParam, //additional parameter to pass to the functions onMessage and onDisconnect
 		RecvHandlerParam::EventHandler onConnect, //called when thread starts
 		RecvHandlerParam::EventHandler onMessage,
 		RecvHandlerParam::EventHandler onDisconnect, //called when the other side shuts down send
@@ -60,8 +47,10 @@ namespace Rain {
 		LPDWORD lpThreadId,
 		LPSECURITY_ATTRIBUTES lpThreadAttributes) {
 		if (recvparam == NULL)
-			recvparam = new RecvHandlerParam(connection, message, buflen, funcparam, onConnect, onMessage, onDisconnect);
+			recvparam = new RecvHandlerParam(connection, message, buflen, funcParam, onConnect, onMessage, onDisconnect);
 
-		return CreateThread(lpThreadAttributes, dwStackSize, recvThread, reinterpret_cast<LPVOID>(recvparam), dwCreationFlags, lpThreadId);
+		std::thread newThread(recvThread, reinterpret_cast<LPVOID>(recvparam));
+		newThread.detach();
+		return newThread.native_handle();
 	}
 }
