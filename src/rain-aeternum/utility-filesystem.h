@@ -100,4 +100,7 @@ namespace Rain {
 
 	bool isFileWritable(std::string file);
 	bool isDirEmpty(std::string dir);
+
+	//get temporary filename in string
+	std::string getTmpFileName();
 }

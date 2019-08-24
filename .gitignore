@@ -1,9 +1,8 @@
 **/.vscode/
 **/.vs/
-
-**/.aps
-**/.user
-**/.exe
+**.user
+**.dropbox.attr
+**.aps
 
 /bin/
 /obj/

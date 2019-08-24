@@ -64,6 +64,10 @@ namespace Rain {
 		//inheirited from SocketManager; sets logging on and off for communications on this socket; pass NULL to disable
 		bool setLogging(void *logger);
 
+		//wait until timeout elapses or queued messages are sent
+		//0 for infinite
+		void blockForMessageQueue(DWORD msTimeout = 5000);
+
 		//gets the internal handlers, mainly for the use of the ServerManager
 		//TODO: fix this
 		std::tuple<RecvHandlerParam::EventHandler, RecvHandlerParam::EventHandler, RecvHandlerParam::EventHandler> getInternalHandlers();
@@ -136,6 +140,7 @@ namespace Rain {
 			RecvHandlerParam::EventHandler onMessage,
 			RecvHandlerParam::EventHandler onDisconnect,
 			void *funcParam);
+		void *getFuncParam();
 
 		//sets buffer length of spawned recvThreads
 		std::size_t setRecvBufLen(std::size_t newLen);

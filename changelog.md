@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0
+
+* Build is now managed from within Visual Studio.
+* Updated `rain-aeternum`.
+* Removed configuration file dependency; now takes command line arguments.
+* Added the ability to be paused on startup via command line.
+* Re-formatted with Tabs of size 2.
+
 ## 1.1.0
 
 * Updated `rain-aeternum` library to the latest version.

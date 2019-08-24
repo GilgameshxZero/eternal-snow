@@ -25,7 +25,6 @@ namespace Rain {
 	int HeadedClientSocketManager::onHeadedMessage(void *param) {
 		ClientSocketManager::DelegateHandlerParam &csmdhp = *reinterpret_cast<ClientSocketManager::DelegateHandlerParam *>(param);
 		HeadedClientSocketManager &hcsm = *reinterpret_cast<HeadedClientSocketManager *>(csmdhp.delegateParam);
-
 		hcsm.accMess += *csmdhp.message;
 		int ret = 0;
 		while (isMessageComplete(hcsm.messageLength, hcsm.accMess)) {

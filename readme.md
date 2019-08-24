@@ -1,3 +1,6 @@
 # Eternal Snow
 
-Short script to place dynamic snowflakes over the desktop.
+Yang Yan
+Windows
+
+Adds snowflakes to the desktop which follow the user's mouse movements.

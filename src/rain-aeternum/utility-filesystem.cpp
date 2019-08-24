@@ -308,4 +308,13 @@ namespace Rain {
 		lfile = getFiles(pathToAbsolute(dir), "*");
 		return (ldir.size() == 2 && lfile.size() == 0);
 	}
+
+	std::string getTmpFileName() {
+		TCHAR path[MAX_PATH + 1];
+		GetTempPath(MAX_PATH + 1, path);
+
+		TCHAR file[MAX_PATH + 1];
+		GetTempFileName(path, "", 0, file);
+		return file;
+	}
 }

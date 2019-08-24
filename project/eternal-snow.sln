@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eternal-snow", "eternal-snow.vcxproj", "{40CA123E-3CE5-4A5E-85EE-3007A82C845C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug|x64 = debug|x64
+		debug|x86 = debug|x86
+		release|x64 = release|x64
+		release|x86 = release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.debug|x64.ActiveCfg = debug|x64
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.debug|x64.Build.0 = debug|x64
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.debug|x86.ActiveCfg = debug|Win32
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.release|x64.ActiveCfg = release|x64
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.release|x64.Build.0 = release|x64
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.release|x86.ActiveCfg = release|Win32
+		{40CA123E-3CE5-4A5E-85EE-3007A82C845C}.release|x86.Build.0 = release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2F70292A-4090-4924-89BA-9CD598663709}
+	EndGlobalSection
+EndGlobal
