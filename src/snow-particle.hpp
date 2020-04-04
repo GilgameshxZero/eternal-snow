@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 namespace EternalSnow {
 	struct SnowParticle {
 		double horiVel, vertVel;  //Velocity.

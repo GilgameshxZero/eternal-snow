@@ -1,0 +1,226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="build">
+      <UniqueIdentifier>{949c63eb-9b36-4e73-a321-9916edb815c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rc">
+      <UniqueIdentifier>{57505977-fa96-4f49-a4c6-3774cbf8bf53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rain">
+      <UniqueIdentifier>{e2de88e9-b752-4f91-bfe1-147fa30874cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rain\cpp">
+      <UniqueIdentifier>{36b45e5c-b262-4bc6-9693-4598e09ae404}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\user-data.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wnd-procs.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\algorithm-libraries.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\condition-variable.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\configuration.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\gdi-plus-libraries.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\logstream.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-base.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-client-manager.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-headed-managers.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-recv-param.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-recv-thread.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-server-manager.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-smtp.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\network-utility.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\rain-window.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\timer.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-error.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-filesystem.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-libraries.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-logging.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-platform.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-string.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\rain\cpp\utility-time.cpp">
+      <Filter>rain\cpp</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\rain\cpp\algorithm-libraries.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\condition-variable.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\configuration.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\gdi-plus-include.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\gdi-plus-libraries.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\logstream.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\minmax.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-base.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-client-manager.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-headed-managers.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-libraries.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-recv-param.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-recv-thread.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-server-manager.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-smtp.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-socket-manager.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-utility.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\network-wsa-include.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\rain.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\rain-window.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\timer.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-error.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-filesystem.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-libraries.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-logging.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-platform.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-string.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\utility-time.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rain\cpp\windows-lam-include.hpp">
+      <Filter>rain\cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\main.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\snow-particle.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\rc\build.hpp">
+      <Filter>rc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\user-data.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wnd-procs.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\build\build-inc.bat">
+      <Filter>build</Filter>
+    </None>
+    <None Include="..\build\post-build-event.bat">
+      <Filter>build</Filter>
+    </None>
+    <None Include="..\build\pre-build-event.bat">
+      <Filter>build</Filter>
+    </None>
+    <None Include="..\rain\cpp\readme.md">
+      <Filter>rain\cpp</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\rc\icon.ico">
+      <Filter>rc</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\rc\rc.rc">
+      <Filter>rc</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

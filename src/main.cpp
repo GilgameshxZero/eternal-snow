@@ -1,19 +1,19 @@
-#include "main.h"
+#include "main.hpp"
 
-int main(int argc, const char* argv[]) {
+int main(int argc, const char *argv[]) {
 	EternalSnow::UserData ud;
 	EternalSnow::pud = &ud;
 
 	//set ctrl+c handler (doesn't work right now...)
 	if (!SetConsoleCtrlHandler([](DWORD fdwCtrlType) -> BOOL {
 		switch (fdwCtrlType) {
-		case CTRL_C_EVENT:
-			PostQuitMessage(0);
-			return TRUE;
-		default:
-			return FALSE;
+			case CTRL_C_EVENT:
+				PostQuitMessage(0);
+				return TRUE;
+			default:
+				return FALSE;
 		}
-		}, TRUE)) {
+	}, TRUE)) {
 		Rain::reportError(GetLastError(), "SetConsoleCtrlHandler failed while capturing ctrl+c signal; continuing...");
 	}
 
@@ -32,7 +32,7 @@ int main(int argc, const char* argv[]) {
 	//read command line
 	for (int a = 0; a < argc; a++) {
 		std::string argument = argv[a];
-		
+
 		//split the argument by =
 		std::size_t splitPosition = argument.find('=');
 		if (splitPosition == argument.length()) continue;
@@ -111,11 +111,11 @@ int main(int argc, const char* argv[]) {
 	nid.uFlags = NIF_ICON | NIF_MESSAGE;
 	nid.hIcon = static_cast<HICON>(
 		LoadImage(ud.hInst,
-			MAKEINTRESOURCE(1),  //program icon
-			IMAGE_ICON,
-			GetSystemMetrics(SM_CXSMICON),
-			GetSystemMetrics(SM_CYSMICON),
-			LR_DEFAULTCOLOR));
+		MAKEINTRESOURCE(1),  //program icon
+		IMAGE_ICON,
+		GetSystemMetrics(SM_CXSMICON),
+		GetSystemMetrics(SM_CYSMICON),
+		LR_DEFAULTCOLOR));
 	nid.hWnd = mainWnd;
 	nid.uCallbackMessage = WM_APP;
 

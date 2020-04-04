@@ -1,4 +1,4 @@
-#include "wnd-procs.h"
+#include "wnd-procs.hpp"
 
 namespace EternalSnow {
 	LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

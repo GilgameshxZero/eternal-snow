@@ -1,9 +1,8 @@
 #pragma once
+#include "../rain/cpp/rain.hpp"
 
-#include <Windows.h>
-
-#include "snow-particle.h"
-#include "user-data.h"
+#include "snow-particle.hpp"
+#include "user-data.hpp"
 
 namespace EternalSnow {
 	LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

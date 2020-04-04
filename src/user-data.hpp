@@ -1,10 +1,7 @@
 #pragma once
+#include "../rain/cpp/rain.hpp"
 
-#include <string>
-#include <vector>
-#include <Windows.h>
-
-#include "snow-particle.h"
+#include "snow-particle.hpp"
 
 namespace EternalSnow {
 	struct UserData {

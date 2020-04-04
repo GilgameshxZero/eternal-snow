@@ -1,4 +1,4 @@
-#include "build.h"
+#include "build.hpp"
 
 1 ICON "icon.ico"
 
@@ -9,9 +9,9 @@ BEGIN
 	BEGIN
 		BLOCK "040904E4"
 		BEGIN
-			VALUE "FileDescription", "Eternal Snow"
+			VALUE "FileDescription", "eternal-snow"
 			VALUE "FileVersion", STRINGIZE(VERSION_MAJOR) "." STRINGIZE(VERSION_MINOR) "." STRINGIZE(VERSION_REVISION) "." STRINGIZE(VERSION_BUILD)
-			VALUE "ProductName", "Eternal Snow"
+			VALUE "ProductName", "eternal-snow"
 			VALUE "ProductVersion", STRINGIZE(VERSION_MAJOR) "." STRINGIZE(VERSION_MINOR) "." STRINGIZE(VERSION_REVISION) "." STRINGIZE(VERSION_BUILD)
 		END
 	END
