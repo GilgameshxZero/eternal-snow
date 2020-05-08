@@ -6,6 +6,10 @@ Only compatible with Windows.
 
 ## Changelog
 
+### 2.0.2
+
+* Update `rain` to `2.0.0`, which removes `css` dependencies, and relink.
+
 ### 2.0.1
 
 * Update to `rain` submodule.

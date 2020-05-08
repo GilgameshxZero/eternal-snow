@@ -5,7 +5,7 @@
 #pragma comment(lib, "Shell32.lib")
 #pragma comment(lib, "Dwmapi.lib")
 
-#include "../rain/cpp/rain.hpp"
+#include "../rain/src/rain.hpp"
 
 #include "user-data.hpp"
 #include "wnd-procs.hpp"
